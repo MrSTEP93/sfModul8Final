@@ -16,67 +16,59 @@ namespace sfModul8Final
             string TagretFolder = @"C:\test\data";
             if (args.Length > 0)
             {
-                Write("We have some agrument: ", ConsoleColor.Green);
+                Write("We have some agrument: ");
                 WriteLn(args[0], ConsoleColor.White);
                 TagretFolder = args[0];
             }
-
-            DeleteOldFiles(TagretFolder, checkMinutes);
-            WriteLn("Press ENTER to exit...", ConsoleColor.White);
-            ReadLn();
-        }
-
-        static void DeleteOldFiles(string path, byte minuteInterval)
-        {
-            if (Directory.Exists(path))
+            if (Directory.Exists(TagretFolder))
             {
-                DirectoryInfo directory = new DirectoryInfo(path);
-                //WriteLn("Folders older than " + minuteInterval + " minutes (Parameter LastAccessTime):", ConsoleColor.White);
-                WriteLn("========== FOLDERS ==========", ConsoleColor.White);
-                try
-                {
-                    foreach (var folder in directory.GetDirectories())
-                    {
-                        Write(folder.Name);
-                        WriteLn("   access: " + folder.LastAccessTime + "   write: " + folder.LastWriteTime, ConsoleColor.Green);
-                        WriteLn((DateTime.Now - folder.LastAccessTime).ToString(), ConsoleColor.Blue);
-                        if ((DateTime.Now - folder.LastAccessTime) > TimeSpan.FromMinutes(minuteInterval))
-                        {
-                            //WriteLn(folder.Name + "is OLDER!!", ConsoleColor.Red);
-                            WriteLn("OLDER!!", ConsoleColor.Red);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    WriteLn("Error while reading folders: " + e, ConsoleColor.Red);
-                }
-
-                WriteLn("========== FILES ==========", ConsoleColor.White);
-                try
-                {
-                    foreach (var file in directory.GetFiles())
-                    {
-                        Write(file.Name);
-                        WriteLn("   access: " + file.LastAccessTime + "   write: " + file.LastWriteTime, ConsoleColor.Green);
-                        WriteLn((DateTime.Now - file.LastAccessTime).ToString(),ConsoleColor.Blue);
-                        if ((DateTime.Now - file.LastAccessTime) > TimeSpan.FromMinutes(minuteInterval))
-                        {
-                            //WriteLn(file.Name);
-                            WriteLn("OLDER!!", ConsoleColor.Red);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    WriteLn("Error while reading folders: " + e, ConsoleColor.Red);
-                }
-                WriteLn("========== THE END ==========", ConsoleColor.White);
+                DeleteOldFiles(TagretFolder, checkMinutes);
             }
             else
             {
                 WriteLn("Directory not exists, or path incorrect", ConsoleColor.Red);
             }
+            WriteLn("Press ENTER to exit...");
+            ReadLn();
+        }
+
+        static void DeleteOldFiles(string path, byte minuteInterval)
+        {
+            DirectoryInfo directory = new DirectoryInfo(path);
+            WriteLn("========== FOLDERS ==========", ConsoleColor.White);
+            try
+            {
+                foreach (var folder in directory.GetDirectories())
+                {
+                    if ((DateTime.Now - folder.LastAccessTime) > TimeSpan.FromMinutes(minuteInterval))
+                    {
+                        Directory.Delete(folder.FullName, true);
+                        WriteLn(folder.FullName + " deleted", ConsoleColor.Blue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                WriteLn("Error while reading folders: " + e, ConsoleColor.Red);
+            }
+
+            WriteLn("==========  FILES  ==========", ConsoleColor.White);
+            try
+            {
+                foreach (var file in directory.GetFiles())
+                {
+                    if ((DateTime.Now - file.LastAccessTime) > TimeSpan.FromMinutes(minuteInterval))
+                    {
+                        File.Delete(file.FullName);
+                        WriteLn(file.FullName + " deleted", ConsoleColor.Blue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                WriteLn("Error while reading folders: " + e, ConsoleColor.Red);
+            }
+            WriteLn("========== THE END ==========", ConsoleColor.White);
         }
     }
 }
