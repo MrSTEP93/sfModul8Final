@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using static ConsoleHelper_50.Helper_50;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace sfModul8Final.Part1
+namespace sfModul8Final.Part3
 {
-    internal class Program
+    internal class Program3
     {
 
         static void Main(string[] args)
@@ -22,14 +20,21 @@ namespace sfModul8Final.Part1
             }
             if (Directory.Exists(TagretFolder))
             {
+                long folderSize = 0;
+                folderSize = CalcSize(TagretFolder);
+                WriteLn($"Original size of directory {TagretFolder} is {folderSize} bytes, or {folderSize / 1024 / 1024} Mbytes", ConsoleColor.White);
+                WriteLn($"Now we start deleting objects... ");
                 DeleteOldFiles(TagretFolder, checkMinutes);
+
+                folderSize = CalcSize(TagretFolder);
+                WriteLn($"Final size of directory {TagretFolder} is {folderSize} bytes, or {folderSize / 1024 / 1024} Mbytes", ConsoleColor.White);
             }
             else
             {
                 WriteLn("Directory not exists, or path incorrect", ConsoleColor.Red);
             }
-            WriteLn("Press ENTER to exit...");
-            ReadLn();
+            //WriteLn("Press ENTER to exit...");
+            //ReadLn();
         }
 
         static void DeleteOldFiles(string path, byte minuteInterval)
@@ -66,9 +71,31 @@ namespace sfModul8Final.Part1
             }
             catch (Exception e)
             {
-                WriteLn("Error while reading folders: " + e.Message, ConsoleColor.Red);
+                WriteLn("Error while reading files: " + e.Message, ConsoleColor.Red);
             }
             WriteLn("========== THE END ==========", ConsoleColor.White);
+        }
+
+        static long CalcSize(string path)
+        {
+            long size = 0;
+            DirectoryInfo directory = new DirectoryInfo(path);
+            try
+            {
+                foreach (var dir in directory.GetDirectories())
+                {
+                    size += CalcSize(dir.FullName);
+                }
+                foreach (var file in directory.GetFiles())
+                {
+                    size += file.Length;
+                }
+            }
+            catch (Exception e)
+            {
+                WriteLn($"Error while reading content of folder _{path}_: {e.Message}", ConsoleColor.Red);
+            }
+            return size;
         }
     }
 }

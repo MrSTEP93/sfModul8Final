@@ -4,7 +4,7 @@ using static ConsoleHelper_50.Helper_50;
 
 namespace sfModul8Final.Part2
 {
-    internal class Program
+    internal class Program2
     {
         static void Main(string[] args)
         {
@@ -19,8 +19,7 @@ namespace sfModul8Final.Part2
             if (Directory.Exists(TagretFolder))
             {
                 long folderSize = 0;
-                DirectoryInfo directory = new DirectoryInfo(TagretFolder);
-                folderSize += CalcSize(directory);
+                folderSize += CalcSize(TagretFolder);
                 WriteLn($"Summary size of target folder is {folderSize} bytes, or {folderSize / 1024 / 1024} Mbytes", ConsoleColor.White);
             }
             else
@@ -30,23 +29,24 @@ namespace sfModul8Final.Part2
             //WriteLn("Press ENTER to exit...");
             //ReadLn();
         }
-        static long CalcSize(DirectoryInfo folder)
+        static long CalcSize(string path)
         {
             long size = 0;
+            DirectoryInfo directory = new DirectoryInfo(path);
             try
             {
-                foreach (var dir in folder.GetDirectories())
+                foreach (var dir in directory.GetDirectories())
                 {
-                    size += CalcSize(dir);
+                    size += CalcSize(dir.FullName);
                 }
-                foreach (var file in folder.GetFiles())
+                foreach (var file in directory.GetFiles())
                 {
                     size += file.Length;
                 }
             }
             catch (Exception e)
             {
-                WriteLn($"Error while reading content of folder _{folder}_: {e.Message}", ConsoleColor.Red);
+                WriteLn($"Error while reading content of folder _{path}_: {e.Message}", ConsoleColor.Red);
             }
             return size;
         }
