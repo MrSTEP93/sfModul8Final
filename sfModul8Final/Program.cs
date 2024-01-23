@@ -4,7 +4,7 @@ using System.Text;
 using static ConsoleHelper_50.Helper_50;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace sfModul8Final
+namespace sfModul8Final.Part1
 {
     internal class Program
     {
