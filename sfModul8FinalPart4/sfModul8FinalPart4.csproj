@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="ConsoleHelper_50">
+      <HintPath>..\..\sf\FirstApp\ConsoleHelper_50\bin\Debug\net5.0\ConsoleHelper_50.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
