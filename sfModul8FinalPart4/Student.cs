@@ -10,7 +10,7 @@ namespace sfModul8FinalPart4
     {
         public string Name { get; set; }
         public string Group { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime BirthDate { get; set; }
         public decimal AverageScore { get; set; }
     }
 }
